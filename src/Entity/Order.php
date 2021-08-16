@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Orders
  *
  * @ORM\Table(name="orders", indexes={@ORM\Index(name="inventory_id", columns={"inventory_id"}), @ORM\Index(name="product_id", columns={"product_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
  */
-class Orders
+class Order
 {
     /**
      * @var float
@@ -203,5 +203,63 @@ class Orders
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Inventory", inversedBy="orders")
+     */
+    private $inventory;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function getProductName(): ?string
+    {
+        return $this->inventory->getProductName();
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->inventory->getColor();
+    }
+
+    public function getSize(): ?string
+    {
+        return $this->inventory->getSize();
+    }
+
+    public function getOrderStatus(): ?string
+    {
+        return $this->orderStatus;
+    }
+
+    public function getTotalCents(): ?float
+    {
+        return $this->totalCents;
+    }
+
+    public function getTransactionId(): ?string
+    {
+        return $this->transactionId;
+    }
+
+    public function getShipperName(): ?string
+    {
+        return $this->shipperName;
+    }
+
+    public function getTrackingNumber(): ?string
+    {
+        return $this->trackingNumber;
+    }
 }

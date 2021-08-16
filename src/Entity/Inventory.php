@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
  * Inventory
  *
  * @ORM\Table(name="inventory", indexes={@ORM\Index(name="product_id", columns={"product_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\InventoryRepository")
  */
 class Inventory
 {
@@ -57,7 +59,7 @@ class Inventory
     private $weight;
 
     /**
-     * @var string|null
+     * @var int|null
      *
      * @ORM\Column(name="price_cents", type="string", length=11, nullable=true)
      */
@@ -71,7 +73,7 @@ class Inventory
     private $salePriceCents;
 
     /**
-     * @var string|null
+     * @var int|null
      *
      * @ORM\Column(name="cost_cents", type="string", length=10, nullable=true)
      */
@@ -81,6 +83,8 @@ class Inventory
      * @var string|null
      *
      * @ORM\Column(name="sku", type="string", length=6, nullable=true)
+     *
+     * @SerializedName("sku")
      */
     private $sku;
 
@@ -112,5 +116,59 @@ class Inventory
      */
     private $note;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="inventory")
+     */
+    private $product;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="inventory")
+     */
+    private $orders;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getProductName(): string
+    {
+       return $this->product->getProductName();
+    }
+
+    public function getSku(): ?string
+    {
+        return $this->sku;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function getSize(): ?string
+    {
+        return $this->size;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->priceCents;
+    }
+
+    public function getCost(): ?int
+    {
+        return $this->costCents;
+    }
+
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
 
 }
